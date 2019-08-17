@@ -71,18 +71,19 @@ public class ActivityForVideoTest extends AppCompatActivity {
         vv.setMediaController(mediaController);
         vv.start();
 
-//앞으로 필요한 기능 - 별도의 변수(int user) 추가하여 각 기기마다 독립적 view 제공
+//현재과제
+//별도의 변수(int user) 추가하여 각 기기마다 독립적 view 제공
 //기기 배치를 위한 가이드라인 제공
 //영상 일시정지 시 정지한 시간 다른 기기로 전송, 그 시간에 맞추어 정지
-// 다시 재생 시 정해진 시간(위성시계 기준)에 동시 재생 시작
-//화면 배치 알고리즘 완성
+//다시 재생 시 정해진 시간(위성시계 기준)에 동시 재생 시작
+//화면 배치 알고리즘 완성(레이아웃과 뷰 연결)
 //미디어 컨트롤러는 호스트기기에만 뜨도록 설정
     }
 
 
     //영상 재생,정지 동기화
     //일시정지
-    
+
 
 
 
