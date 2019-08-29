@@ -11,9 +11,7 @@ import android.widget.Button;
 import android.net.Uri;
 
 
-public class ActivityForVideoTest extends AppCompatActivity {
-    //컨스트레인트 레이아웃 정의
-
+public class Host extends AppCompatActivity {
 
     int user = 1;//사용자 식별번호, 호스트 기기에만 미디어컨트롤러가 나오도록 하기 위함(user 변수의 값이 1인 경우에만 나오게 함)
     int aW, bW, cW, aH, bH, cH = 0;//화면 분할을 위한 각 디바이스 가로세로 길이
@@ -21,7 +19,7 @@ public class ActivityForVideoTest extends AppCompatActivity {
     int H = 1500;//결정된 레이아웃의 길이
     int W = 3000;
     int aX, bX, cX = 0;//좌표 이동을 위한 각 기기의 X값
-
+    int aY, bY, cY = 0;
     int stopTime = 0;
     VideoView vv;
     Button btnStart, btnPause;
@@ -29,8 +27,7 @@ public class ActivityForVideoTest extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //컨스트레인트 레이아웃 내부에 비디오뷰 생성 비디오뷰 사이즈는 레이아웃과 동일, 이후 비디오뷰 위치 조정은 setX 매소드를 이용
-        setContentView(R.layout.activity_for_video_test);
+        setContentView(R.layout.activity_host);
         //시작,일시정지 버튼
         btnStart = (Button) findViewById(R.id.btnStart);
         btnPause = (Button) findViewById(R.id.btnPause);
@@ -38,17 +35,8 @@ public class ActivityForVideoTest extends AppCompatActivity {
         vv = findViewById(R.id.videoView1);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test2);
         vv.setVideoURI(video);
-        ViewGroup.LayoutParams params = vv.getLayoutParams();
-        params.height = H;
-        params.width = W;
-        vv.setLayoutParams(params);
-        vv.setX(aX);
 
-
-//레이아웃 사이즈 조정(layoutparams 매소드 이용)
-
-
-        //비디오뷰의 높이 설정을 위한 디바이스들 중 높이 최소값 구해 sH에 저장, 함수화 필요
+        //비디오뷰의 높이 설정을 위한 디바이스들 중 높이 최소값 구해 sH에 저장
         if (aH < bH) {
             if (aH < cH) {
                 sH = aH;
@@ -62,14 +50,24 @@ public class ActivityForVideoTest extends AppCompatActivity {
                 sH = bH;
             }
         }
-
         //결정된 레이아웃의 높이, 넓이값 정의
         W = aW + bW + cW;
-        H = sH;
+        H = W / 16 * 9;
+        if (H > sH) {
+            W = sH / 9 * 16;
+        }
         //기기마다 다른 setX값 지정을 위함
         aX = 0;
         bX = -aW;
         cX = -aW - bW;
+
+        //비디오뷰 사이즈 조절
+        ViewGroup.LayoutParams params = vv.getLayoutParams();
+        params.height = H;
+        params.width = W;
+        vv.setLayoutParams(params);
+        vv.setX(aX);
+        vv.setY(aY);
     }
     //user 변수의 값이 1일 경우(=호스트 기기일 경우) 미디어 컨트롤러 생성
     //public void mediaController () {
