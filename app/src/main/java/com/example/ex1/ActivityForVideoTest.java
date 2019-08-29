@@ -33,11 +33,6 @@ public class ActivityForVideoTest extends AppCompatActivity {
     VideoView vv;
     Button btnStart,btnPause;
 
-    private MediaPlayer.OnVideoSizeChangedListener onVIdeoSizeChangedListener = new MediaPlayer.OnVideoSizeChangedListener(){
-        public void onVideoSizeChanged(MediaPlayer mp,int width, int height){
-            LayoutParams lp = new
-        }
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
