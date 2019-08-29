@@ -1,15 +1,12 @@
 package com.example.ex1;
 
 
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.VideoView;
-import android.widget.MediaController;
+//import android.widget.MediaController;
 import android.widget.Button;
 import android.net.Uri;
 
@@ -18,17 +15,16 @@ public class ActivityForVideoTest extends AppCompatActivity {
     //컨스트레인트 레이아웃 정의
 
 
-
     int user = 1;//사용자 식별번호, 호스트 기기에만 미디어컨트롤러가 나오도록 하기 위함(user 변수의 값이 1인 경우에만 나오게 함)
-    int aW,bW,cW,aH,bH,cH = 0;//화면 분할을 위한 각 디바이스 가로세로 길이
+    int aW, bW, cW, aH, bH, cH = 0;//화면 분할을 위한 각 디바이스 가로세로 길이
     int sH = 0;//기기 a b c 중 가장 작은 높이값
     int H = 1500;//결정된 레이아웃의 길이
     int W = 3000;
-    int aX,bX,cX = 0;//좌표 이동을 위한 각 기기의 X값
+    int aX, bX, cX = 0;//좌표 이동을 위한 각 기기의 X값
 
     int stopTime = 0;
     VideoView vv;
-    Button btnStart,btnPause;
+    Button btnStart, btnPause;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,11 +38,11 @@ public class ActivityForVideoTest extends AppCompatActivity {
         vv = findViewById(R.id.videoView1);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test2);
         vv.setVideoURI(video);
-        ViewGroup.LayoutParams params=vv.getLayoutParams();
-        params.height=H;
-        params.width=W;
+        ViewGroup.LayoutParams params = vv.getLayoutParams();
+        params.height = H;
+        params.width = W;
         vv.setLayoutParams(params);
-        vv.setX(-500);
+        vv.setX(aX);
 
 
 //레이아웃 사이즈 조정(layoutparams 매소드 이용)
@@ -70,47 +66,44 @@ public class ActivityForVideoTest extends AppCompatActivity {
         //결정된 레이아웃의 높이, 넓이값 정의
         W = aW + bW + cW;
         H = sH;
-
+        //기기마다 다른 setX값 지정을 위함
+        aX = 0;
+        bX = -aW;
+        cX = -aW - bW;
     }
-        //user 변수의 값이 1일 경우(=호스트 기기일 경우) 미디어 컨트롤러 생성
-
-    public void mediaController () {
-        if (user == 1) {
-            MediaController mediaController = new MediaController(this);
-            mediaController.setAnchorView(vv);
-            mediaController.setPadding(0, 0, 0, 0);
-            vv.setMediaController(mediaController);
-        }
-    }
-
+    //user 변수의 값이 1일 경우(=호스트 기기일 경우) 미디어 컨트롤러 생성
+    //public void mediaController () {
+    //    if (user == 1) {
+    //        MediaController mediaController = new MediaController(this);
+    //        mediaController.setAnchorView(vv);
+    //        mediaController.setPadding(0, 0, 0, 0);
+    //        vv.setMediaController(mediaController);
+    //    }
+    //}
 
 
-    public void StartButton(View v){
+    public void StartButton(View v) {
         playVideo();
     }
-    public void PauseButton(View v){
+
+    public void PauseButton(View v) {
         pauseVideo();
     }
 
     //영상 재생,정지 동기화
     //일시정지
-    public void pauseVideo(){
+    public void pauseVideo() {
+        vv.getCurrentPosition();
         vv.pause();
         stopTime = vv.getCurrentPosition();
-        vv.seekTo(stopTime);
+        //vv.seekTo(stopTime);
     }
+
     //재생
     //Handler 이용해 현재 시간으로부터 2000밀리세컨드 후에 재생 Method 호출(vv.start())
-    public void playVideo(){
-        vv.seekTo(stopTime);
-        long cT = System.currentTimeMillis();
-        long playWhen = cT + 2000;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                vv.start();
-            }
-        }, playWhen);
+    public void playVideo() {
+        //vv.seekTo(stopTime);
+        vv.start();
     }
 }
 //일시정지
@@ -118,7 +111,7 @@ public class ActivityForVideoTest extends AppCompatActivity {
 //stopSignal을 받으면 stopTime 에 저장된 시간으로 영상 이동 후 일시정지
 
 //다시 재생
-//호스트 기기에서 재생을 누른 경우 현재시간을 구한 후 그로부터 +3sec 된 시간을 playTime 변수에 저장, playSignal과 함께 클라이언트 기기로 전송
+//호스트 기기에서 재생을 누른 경우 현재시간을 구한 후 그로부터 +2sec 된 시간을 playTime 변수에 저장, playSignal과 함께 클라이언트 기기로 전송
 //playSignal을 받으면 playTime 변수에 저장된 시간에 재생 시작
 // 현재과제
 ////별도의 변수(int user) 추가하여 각 기기마다 독립적 액티비티 제공
