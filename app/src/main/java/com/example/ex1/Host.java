@@ -57,7 +57,7 @@ public class Host extends AppCompatActivity {
         if (H > sH) {
             W = sH / 9 * 16;
         }
-        //기기마다 다른 setX값 지정을 위함
+        //기기마다 다른 setX,Y값 지정을 위함
         aX = 0;
         bX = -aW;
         cX = -aW - bW;

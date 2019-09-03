@@ -35,6 +35,7 @@ public class Client extends AppCompatActivity {
         params.height = H;
         params.width = W;
         vv.setLayoutParams(params);
+        //좌표는 픽셀단위임
         vv.setX(bX);
         vv.setY(bY);
     }
