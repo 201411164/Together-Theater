@@ -1,6 +1,7 @@
 package com.example.ex1;
 
 
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
@@ -9,11 +10,20 @@ import android.os.Bundle;
 import android.widget.VideoView;
 import android.widget.Button;
 import android.net.Uri;
+import android.net.wifi.p2p.WifiP2pDevice;
 
 
 public class Host extends AppCompatActivity {
-
-    int user = 1;//사용자 식별번호, 호스트 기기에만 미디어컨트롤러가 나오도록 하기 위함(user 변수의 값이 1인 경우에만 나오게 함)
+    //받아오는 데이터 목록
+    public WifiP2pDevice wifiP2pDevice;
+    public String str_address;
+    public int px_width;
+    public int px_height;
+    public int dpi;
+    public float density;
+    public boolean isGroupOwner;
+    //
+    int user=1;//사용자 식별번호, 호스트 기기에만 미디어컨트롤러가 나오도록 하기 위함(user 변수의 값이 1인 경우에만 나오게 함)
     int aW, bW, cW, aH, bH, cH = 0;//화면 분할을 위한 각 디바이스 가로세로 길이
     int sH = 0;//기기 a b c 중 가장 작은 높이값
     int H = 1500;//결정된 레이아웃의 길이
@@ -30,8 +40,8 @@ public class Host extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
         //시작,일시정지 버튼
-        btnStart = (Button) findViewById(R.id.btnStart);
-        btnPause = (Button) findViewById(R.id.btnPause);
+        btnStart = findViewById(R.id.btnStart);
+        btnPause = findViewById(R.id.btnPause);
         //비디오뷰 생성
         vv = findViewById(R.id.videoView1);
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.test2);
@@ -67,8 +77,12 @@ public class Host extends AppCompatActivity {
 
         //비디오뷰 사이즈 조절
         ViewGroup.LayoutParams params = vv.getLayoutParams();
-        params.height = H;
-        params.width = W;
+        //params.height = H;
+        //params.width = W;
+        final int ww = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1500,getResources().getDisplayMetrics());
+        final int hh = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,800,getResources().getDisplayMetrics());
+        params.height=ww;
+        params.width=hh;
         vv.setLayoutParams(params);
         vv.setX(aX);
         vv.setY(aY);
@@ -76,7 +90,7 @@ public class Host extends AppCompatActivity {
 
     //user 변수의 값이 1일 경우(=호스트 기기일 경우) 미디어 컨트롤러 생성
     public void mediaController() {
-        if (user == 1) {
+        if (isGroupOwner = true) {
             MediaController mediaController = new MediaController(this);
             mediaController.setAnchorView(vv);
             mediaController.setPadding(0, 0, 0, 0);
